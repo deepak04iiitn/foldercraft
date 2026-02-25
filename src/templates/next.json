@@ -1,0 +1,15 @@
+{
+  "app": {
+    "(site)": {},
+    "api": {},
+    "globals.css": "file",
+    "layout.tsx": "file",
+    "page.tsx": "file"
+  },
+  "components": {},
+  "lib": {},
+  "public": {},
+  "tests": {},
+  "package.json": "file"
+}
+

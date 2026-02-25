@@ -1,0 +1,13 @@
+{
+  "src": {
+    "controllers": {},
+    "services": {},
+    "models": {},
+    "routes": {},
+    "utils": {}
+  },
+  "tests": {},
+  ".env": "file",
+  "package.json": "file"
+}
+

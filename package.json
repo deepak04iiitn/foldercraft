@@ -1,0 +1,47 @@
+{
+  "name": "foldercraft",
+  "version": "1.0.0",
+  "description": "CLI to generate customizable folder structures for web projects",
+  "type": "module",
+  "main": "./dist/index.js",
+  "bin": {
+    "foldr": "./dist/cli.js"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "node --watch src/cli.js -- --help",
+    "build": "node ./build.mjs",
+    "test": "vitest run",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "prepublishOnly": "npm run lint && npm run test && npm run build"
+  },
+  "keywords": [
+    "cli",
+    "scaffold",
+    "folders",
+    "generator"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "commander": "^13.1.0",
+    "fs-extra": "^11.3.0",
+    "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "eslint": "^9.20.1",
+    "globals": "^15.14.0",
+    "prettier": "^3.5.1",
+    "vitest": "^3.0.7"
+  }
+}
+
