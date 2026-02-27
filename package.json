@@ -1,6 +1,6 @@
 {
   "name": "foldercraft",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CLI to generate customizable folder structures for web projects",
   "type": "module",
   "main": "./dist/index.js",
@@ -44,4 +44,3 @@
     "vitest": "^3.0.7"
   }
 }
-
