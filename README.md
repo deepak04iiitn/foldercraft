@@ -6,6 +6,7 @@
 - CLI command: `foldercraft`
 
 It supports templates, custom JSON configs, interactive wizard mode, dry-run previews, merge/overwrite strategies, and reusable profiles.
+Each generated directory (root + nested) gets a `README.md` with a short purpose note by default.
 
 ## Table of contents
 
@@ -271,6 +272,8 @@ foldercraft --framework next --path ./site --remove app/old-route --strict
   - default: fail if target exists
   - `--merge`: keep existing files, add missing nodes
   - `--overwrite`: remove target first, then recreate
+- A `README.md` is auto-created in each generated directory unless that directory already defines its own `README.md` in template/config/customizations.
+- In `--merge` mode, existing `README.md` files are preserved.
 - `--merge` and `--overwrite` are mutually exclusive.
 - Root filesystem path is blocked for safety.
 - Invalid config structure and invalid path segments are rejected with clear errors.

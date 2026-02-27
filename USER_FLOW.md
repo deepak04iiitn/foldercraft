@@ -47,7 +47,8 @@ What happens:
 1. `foldercraft` loads the React template
 2. checks your target path
 3. applies extra options (if any)
-4. writes the final structure to disk
+4. auto-adds `README.md` inside each generated directory (unless already defined)
+5. writes the final structure to disk
 
 ---
 
@@ -86,6 +87,12 @@ foldercraft --framework react --path ./my-app --add-file .env .env.example
 
 ```bash
 foldercraft --framework react --path ./my-app --set-file README.md::"# My App"
+```
+
+You can also set folder-specific README files:
+
+```bash
+foldercraft --framework react --path ./my-app --set-file src/README.md::"# src\nCore source files live here."
 ```
 
 ### Remove folders/files from output
@@ -150,6 +157,7 @@ foldercraft --framework next --path ./web --overwrite
 ```
 
 Note: `--merge` and `--overwrite` cannot be used together.
+In `--merge` mode, existing README files are kept.
 
 ---
 
@@ -233,6 +241,7 @@ If preview looks correct, run again without `--dry-run`.
 - **Merge/Overwrite modes**: control behavior for existing folders
 - **Interactive mode**: guided setup with prompts
 - **Profiles**: save and reuse repeated setups
+- **Auto README per directory**: root + nested folders include a short `README.md` by default
 
 ---
 
