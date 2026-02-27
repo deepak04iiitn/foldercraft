@@ -159,6 +159,13 @@ foldercraft --framework next --path ./web --overwrite
 Note: `--merge` and `--overwrite` cannot be used together.
 In `--merge` mode, existing README files are kept.
 
+When the target folder already exists, CLI now asks for confirmation:
+
+- With `--merge`, you can choose:
+  - merge directly into the current target folder, or
+  - create/use an inner folder inside that target path (then it asks for inner folder name)
+- With `--overwrite`, it asks you to type the current folder name before deleting/recreating.
+
 ---
 
 ## 9) Use interactive mode (wizard)
@@ -239,6 +246,7 @@ If preview looks correct, run again without `--dry-run`.
 - **Add/Set/Remove tools**: shape output in one command
 - **Dry run**: safe preview before write
 - **Merge/Overwrite modes**: control behavior for existing folders
+- **Safety prompts on existing folders**: merge mode offers direct vs inner-folder generation, overwrite asks folder-name confirmation
 - **Interactive mode**: guided setup with prompts
 - **Profiles**: save and reuse repeated setups
 - **Auto README per directory**: root + nested folders include a short `README.md` by default

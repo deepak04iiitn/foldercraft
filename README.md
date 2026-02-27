@@ -179,6 +179,11 @@ Default profile store:
 
 - Default behavior fails when target already exists
 - `--merge` and `--overwrite` are mutually exclusive
+- When using `--merge` on an existing target, CLI asks:
+  - merge directly into current folder, or
+  - create/use an inner folder inside current folder (asks for inner folder name)
+- When using `--overwrite` on an existing target, CLI asks you to type folder name for confirmation
+- Use `--no-input` to skip prompts for automation/scripts
 - Root filesystem path is blocked
 - Invalid config structure/path segments are rejected
 

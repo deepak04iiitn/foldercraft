@@ -2,6 +2,8 @@
 import { Command } from "commander";
 import readline from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
+import path from "node:path";
+import fs from "fs-extra";
 import { runFoldr } from "./index.js";
 import { createLogger } from "./utils/logger.js";
 import {
@@ -80,6 +82,72 @@ async function askRepeat(rl, label) {
     values.push(value);
   }
   return values;
+}
+
+function isValidFolderName(name) {
+  return Boolean(name) && !name.includes("/") && !name.includes("\\") && name !== "." && name !== "..";
+}
+
+async function resolveExistingTargetPrompt(options, logger) {
+  if (options.noInput || (!options.merge && !options.overwrite)) {
+    return options;
+  }
+
+  const targetPath = options.path ?? ".";
+  const resolvedTarget = path.resolve(targetPath);
+  const targetExists = await fs.pathExists(resolvedTarget);
+  if (!targetExists) {
+    return options;
+  }
+
+  const targetFolderName = path.basename(resolvedTarget);
+  const rl = readline.createInterface({ input, output });
+  try {
+    if (options.overwrite) {
+      const answer = (
+        await rl.question(
+          `Target exists:\n${resolvedTarget}\nType folder name "${targetFolderName}" to confirm overwrite: `,
+        )
+      ).trim();
+      if (answer !== targetFolderName) {
+        throw new Error(
+          `Folder name confirmation failed. Expected "${targetFolderName}". Operation cancelled.`,
+        );
+      }
+      logger?.info(`Confirmed "${targetFolderName}". Proceeding with --overwrite.`);
+      return options;
+    }
+
+    const selection = (
+      await rl.question(
+        `Target exists:\n${resolvedTarget}\n` +
+          "Choose merge mode:\n" +
+          "1) Merge structure directly into this folder\n" +
+          "2) Create/use an inner folder inside this path for generated structure\n" +
+          "Enter 1 or 2 [1]: ",
+      )
+    ).trim();
+    const useInnerFolder = selection === "2";
+    if (!useInnerFolder) {
+      logger?.info(`Proceeding to merge directly into: ${resolvedTarget}`);
+      return options;
+    }
+
+    const innerFolderName = (
+      await rl.question("Enter inner folder name (single folder name): ")
+    ).trim();
+    if (!isValidFolderName(innerFolderName)) {
+      throw new Error(
+        'Invalid folder name. Use a single folder name without "/" or "\\" characters.',
+      );
+    }
+
+    const innerTargetPath = path.join(resolvedTarget, innerFolderName);
+    logger?.info(`Using inner folder target: ${innerTargetPath}`);
+    return { ...options, path: innerTargetPath };
+  } finally {
+    rl.close();
+  }
 }
 
 async function askInteractive(defaults = {}) {
@@ -223,6 +291,8 @@ program
       if (shouldPrompt) {
         finalOptions = await askInteractive(finalOptions);
       }
+
+      finalOptions = await resolveExistingTargetPrompt(finalOptions, logger);
 
       await runFoldr({
         framework: finalOptions.framework,
