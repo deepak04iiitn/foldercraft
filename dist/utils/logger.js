@@ -22,7 +22,7 @@ export function createLogger({ verbose = false } = {}) {
     banner() {
       process.stdout.write(
         `${pc.cyan("┌──────────────────────────┐")}\n` +
-          `${pc.cyan("│")} ${pc.bold("foldr")} ${pc.gray("v1.0.0")}            ${pc.cyan("│")}\n` +
+          `${pc.cyan("│")} ${pc.bold("foldercraft")} ${pc.gray("v1.0.0")}      ${pc.cyan("│")}\n` +
           `${pc.cyan("│")} Generate project folders ${pc.cyan("│")}\n` +
           `${pc.cyan("└──────────────────────────┘")}\n`,
       );

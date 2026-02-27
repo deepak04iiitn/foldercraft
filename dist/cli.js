@@ -153,7 +153,7 @@ function pickGenerationFlags(options) {
 }
 
 program
-  .name("foldr")
+  .name("foldercraft")
   .description("Generate customizable folder structures for web projects")
   .version("1.0.0")
   .option("-f, --framework <name>", "Framework template (react, node, next)")
@@ -180,7 +180,7 @@ program
   .option("--delete-profile <name>", "Delete a saved profile")
   .option(
     "--profile-store <file>",
-    "Custom profile store path (default: ~/.foldr/profiles.json)",
+    "Custom profile store path (default: ~/.foldercraft/profiles.json)",
   )
   .option("-v, --verbose", "Show detailed logs", false)
   .option("--no-banner", "Disable startup banner")

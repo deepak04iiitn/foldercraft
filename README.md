@@ -3,7 +3,7 @@
 `foldercraft` is a powerful Node.js CLI for generating folder structures for web projects with full user control.
 
 - npm package name: `foldercraft`
-- CLI command: `foldr`
+- CLI command: `foldercraft`
 
 It supports templates, custom JSON configs, interactive wizard mode, dry-run previews, merge/overwrite strategies, and reusable profiles.
 
@@ -51,7 +51,7 @@ npm link
 After linking, run the CLI as:
 
 ```bash
-foldr --help
+foldercraft --help
 ```
 
 ## Quick start
@@ -59,35 +59,35 @@ foldr --help
 Create a React-style project structure:
 
 ```bash
-foldr --framework react --path ./my-app
+foldercraft --framework react --path ./my-app
 ```
 
 Preview without writing files:
 
 ```bash
-foldr --framework react --path ./my-app --dry-run
+foldercraft --framework react --path ./my-app --dry-run
 ```
 
 Run guided mode:
 
 ```bash
-foldr --interactive
+foldercraft --interactive
 ```
 
 ## CLI usage
 
 ```bash
-foldr [options]
+foldercraft [options]
 ```
 
 Common commands:
 
 ```bash
-foldr --framework react --path ./app
-foldr --framework node --path ./api --merge
-foldr --framework next --path ./web --overwrite
-foldr --config ./structure.json --path ./custom-project
-foldr --framework react --config ./overrides.json --extend --path ./client
+foldercraft --framework react --path ./app
+foldercraft --framework node --path ./api --merge
+foldercraft --framework next --path ./web --overwrite
+foldercraft --config ./structure.json --path ./custom-project
+foldercraft --framework react --config ./overrides.json --extend --path ./client
 ```
 
 ## Options reference
@@ -124,15 +124,15 @@ foldr --framework react --config ./overrides.json --extend --path ./client
 ### 1) Framework template
 
 ```bash
-foldr --framework react --path ./client
-foldr --framework node --path ./api
-foldr --framework next --path ./web
+foldercraft --framework react --path ./client
+foldercraft --framework node --path ./api
+foldercraft --framework next --path ./web
 ```
 
 ### 2) Custom config only
 
 ```bash
-foldr --config ./my-structure.json --path ./project
+foldercraft --config ./my-structure.json --path ./project
 ```
 
 ### 3) Framework + custom config
@@ -140,7 +140,7 @@ foldr --config ./my-structure.json --path ./project
 With `--extend`, framework + config are merged:
 
 ```bash
-foldr --framework react --config ./overrides.json --extend --path ./app
+foldercraft --framework react --config ./overrides.json --extend --path ./app
 ```
 
 Without `--extend`, config is used as the source structure and framework is ignored with a warning.
@@ -150,7 +150,7 @@ Without `--extend`, config is used as the source structure and framework is igno
 Start from scratch and add only what you want:
 
 ```bash
-foldr --empty --path ./starter --add-dir src docs --add-file README.md
+foldercraft --empty --path ./starter --add-dir src docs --add-file README.md
 ```
 
 ## Custom config schema
@@ -191,7 +191,7 @@ Example:
 Start wizard mode:
 
 ```bash
-foldr --interactive
+foldercraft --interactive
 ```
 
 Wizard behavior:
@@ -213,32 +213,32 @@ Profiles let users save reusable generation setups.
 ### Save profile
 
 ```bash
-foldr --framework react --add-dir src/features --add-file .env --save-profile react-base
+foldercraft --framework react --add-dir src/features --add-file .env --save-profile react-base
 ```
 
 ### Use profile
 
 ```bash
-foldr --profile react-base --path ./client-a
+foldercraft --profile react-base --path ./client-a
 ```
 
 ### List and delete
 
 ```bash
-foldr --list-profiles
-foldr --delete-profile react-base
+foldercraft --list-profiles
+foldercraft --delete-profile react-base
 ```
 
 ### Custom profile store path
 
 ```bash
-foldr --profile react-base --profile-store ./team-profiles.json --path ./app
+foldercraft --profile react-base --profile-store ./team-profiles.json --path ./app
 ```
 
 Default profile store path:
 
 ```text
-~/.foldr/profiles.json
+~/.foldercraft/profiles.json
 ```
 
 ## Advanced examples
@@ -246,7 +246,7 @@ Default profile store path:
 ### Add and remove in one command
 
 ```bash
-foldr --framework react --path ./web \
+foldercraft --framework react --path ./web \
   --add-dir src/features src/shared \
   --add-file .env .env.example \
   --set-file README.md::"# Web App" \
@@ -256,13 +256,13 @@ foldr --framework react --path ./web \
 ### Safe merge into existing project
 
 ```bash
-foldr --framework node --path ./existing-api --merge --add-dir src/jobs
+foldercraft --framework node --path ./existing-api --merge --add-dir src/jobs
 ```
 
 ### Strict remove validation
 
 ```bash
-foldr --framework next --path ./site --remove app/old-route --strict
+foldercraft --framework next --path ./site --remove app/old-route --strict
 ```
 
 ## Behavior and safety rules
@@ -278,7 +278,7 @@ foldr --framework next --path ./site --remove app/old-route --strict
 
 ## Troubleshooting
 
-### Command not found (`foldr`)
+### Command not found (`foldercraft`)
 
 Run:
 
@@ -315,7 +315,7 @@ npm run build
 Useful checks:
 
 ```bash
-foldr --framework react --path ./tmp-app --dry-run --verbose
+foldercraft --framework react --path ./tmp-app --dry-run --verbose
 ```
 
 ## Publishing
@@ -340,4 +340,5 @@ npm publish --access public
 ## License
 
 MIT
+
 
