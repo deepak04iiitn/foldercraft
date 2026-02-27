@@ -207,15 +207,6 @@ npm link
 
 Ensure JSON is valid and top-level value is an object.
 
-### Publish/readme not updated on npm
-
-npm updates package README only when a new version is published.
-
-```bash
-npm version patch
-npm publish --access public
-```
-
 ## License
 
 MIT
