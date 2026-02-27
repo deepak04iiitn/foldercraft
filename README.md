@@ -1,170 +1,126 @@
 # foldercraft
 
-`foldercraft` is a powerful Node.js CLI for generating folder structures for web projects with full user control.
+`foldercraft` is a CLI that generates project folder structures quickly and safely.
 
-- npm package name: `foldercraft`
-- CLI command: `foldercraft`
+- npm package: `foldercraft`
+- command: `foldercraft`
 
-It supports templates, custom JSON configs, interactive wizard mode, dry-run previews, merge/overwrite strategies, and reusable profiles.
-Each generated directory (root + nested) gets a `README.md` with a short purpose note by default.
+It supports framework templates, custom JSON configs, interactive mode, dry-run previews, merge/overwrite strategies, profiles, and automatic README files for each generated directory.
 
-## Table of contents
-
-- [Why foldercraft](#why-foldercraft)
-- [Installation](#installation)
-- [Quick start](#quick-start)
-- [CLI usage](#cli-usage)
-- [Options reference](#options-reference)
-- [Template modes](#template-modes)
-- [Custom config schema](#custom-config-schema)
-- [Interactive wizard](#interactive-wizard)
-- [Profiles](#profiles)
-- [Advanced examples](#advanced-examples)
-- [Behavior and safety rules](#behavior-and-safety-rules)
-- [Troubleshooting](#troubleshooting)
-- [Development](#development)
-- [Publishing](#publishing)
-- [License](#license)
-
-## Why foldercraft
-
-- Generate React, Node, and Next-style folder trees quickly.
-- Customize output deeply with add/remove/set operations.
-- Use dry-run mode to preview changes before writing.
-- Save reusable profiles for teams and repeat projects.
-- Keep behavior safe by default with explicit overwrite controls.
-
-## Installation
-
-### Global install
+## Install
 
 ```bash
 npm install -g foldercraft
 ```
 
-### Local development install
-
-```bash
-npm install
-npm link
-```
-
-After linking, run the CLI as:
+Verify:
 
 ```bash
 foldercraft --help
 ```
 
-## Quick start
+## Quick Start
 
-Create a React-style project structure:
+Generate a React-style project structure:
 
 ```bash
 foldercraft --framework react --path ./my-app
 ```
 
-Preview without writing files:
+Preview changes without writing anything:
 
 ```bash
 foldercraft --framework react --path ./my-app --dry-run
 ```
 
-Run guided mode:
+Run guided wizard mode:
 
 ```bash
 foldercraft --interactive
 ```
 
-## CLI usage
+## Common Workflows
+
+Use a specific target folder:
+
+```bash
+foldercraft --framework node --path "C:\Projects\api"
+```
+
+Generate from your own config:
+
+```bash
+foldercraft --config ./my-structure.json --path ./custom-project
+```
+
+Merge framework + custom config:
+
+```bash
+foldercraft --framework react --config ./overrides.json --extend --path ./client
+```
+
+Start from empty and add what you need:
+
+```bash
+foldercraft --empty --path ./starter --add-dir src docs --add-file .env README.md
+```
+
+## Features
+
+- **Framework templates**: `react`, `node`, `next`
+- **Custom structure config**: JSON-based folder/file definitions
+- **Extend mode**: merge framework template + custom config
+- **Customizations**: add/remove/set files and directories in one command
+- **Dry-run mode**: preview operations before write
+- **Safe write strategies**: default fail, `--merge`, or `--overwrite`
+- **Interactive wizard**: guided setup for first-time users
+- **Profiles**: save and reuse setup presets
+- **Auto README generation**: root + nested generated directories get `README.md`
+
+## CLI Usage
 
 ```bash
 foldercraft [options]
 ```
 
-Common commands:
-
-```bash
-foldercraft --framework react --path ./app
-foldercraft --framework node --path ./api --merge
-foldercraft --framework next --path ./web --overwrite
-foldercraft --config ./structure.json --path ./custom-project
-foldercraft --framework react --config ./overrides.json --extend --path ./client
-```
-
-## Options reference
+### Key options
 
 | Option | Description |
 | --- | --- |
-| `-f, --framework <name>` | Template framework: `react`, `node`, `next` |
+| `-f, --framework <name>` | Framework template: `react`, `node`, `next` |
 | `-p, --path <path>` | Target directory path |
-| `-c, --config <file>` | JSON config file path |
-| `-o, --overwrite` | Replace target directory if it exists |
-| `-m, --merge` | Merge into existing target and preserve existing files |
+| `-c, --config <file>` | Custom JSON config file |
 | `-e, --extend` | Merge framework template + custom config |
-| `--empty` | Start from empty structure (no framework template) |
-| `-d, --dry-run` | Preview operations without filesystem writes |
-| `--add-dir <paths...>` | Add custom directories |
-| `--add-file <paths...>` | Add custom empty files |
+| `--empty` | Start from empty structure |
+| `-d, --dry-run` | Preview without filesystem writes |
+| `-m, --merge` | Merge into existing folder (preserve existing files) |
+| `-o, --overwrite` | Recreate target folder from scratch |
+| `--add-dir <paths...>` | Add directory paths |
+| `--add-file <paths...>` | Add empty files |
 | `--set-file <pairs...>` | Set file content via `path::content` |
-| `--remove <paths...>` | Remove nodes from final structure |
-| `--strict` | Fail when a remove path is missing |
-| `-i, --interactive` | Start guided wizard |
-| `--no-input` | Disable auto prompts |
+| `--remove <paths...>` | Remove nodes from final output |
+| `--strict` | Fail when remove path does not exist |
+| `-i, --interactive` | Guided wizard mode |
 | `--profile <name>` | Load saved profile |
-| `--save-profile <name>` | Save current options as a profile |
-| `--list-profiles` | List profiles |
-| `--delete-profile <name>` | Delete profile |
-| `--profile-store <file>` | Custom profile store path |
+| `--save-profile <name>` | Save current options as profile |
+| `--list-profiles` | List saved profiles |
+| `--delete-profile <name>` | Delete saved profile |
+| `--profile-store <file>` | Use custom profile store file |
 | `-v, --verbose` | Verbose logs |
-| `--no-banner` | Disable startup banner |
-| `--version` | Print version |
 | `--help` | Show help |
+| `--version` | Show version |
 
-## Template modes
-
-### 1) Framework template
-
-```bash
-foldercraft --framework react --path ./client
-foldercraft --framework node --path ./api
-foldercraft --framework next --path ./web
-```
-
-### 2) Custom config only
-
-```bash
-foldercraft --config ./my-structure.json --path ./project
-```
-
-### 3) Framework + custom config
-
-With `--extend`, framework + config are merged:
-
-```bash
-foldercraft --framework react --config ./overrides.json --extend --path ./app
-```
-
-Without `--extend`, config is used as the source structure and framework is ignored with a warning.
-
-### 4) Empty mode
-
-Start from scratch and add only what you want:
-
-```bash
-foldercraft --empty --path ./starter --add-dir src docs --add-file README.md
-```
-
-## Custom config schema
+## Config Schema
 
 A config file must be a JSON object.
 
-Supported node types:
+Supported values:
 
 - `{}`: directory
 - `"file"`: empty file
 - `"any string"`: file with string content
-- `{ "$file": "content" }`: explicit file node
-- `{ "$dir": { ... } }`: explicit directory node
+- `{ "$file": "content" }`: explicit file
+- `{ "$dir": { ... } }`: explicit directory
 
 Example:
 
@@ -178,167 +134,82 @@ Example:
   "docs": {},
   "README.md": {
     "$file": "# Project\nGenerated by foldercraft.\n"
-  },
-  "scripts": {
-    "$dir": {
-      "build.sh": "file"
-    }
   }
 }
 ```
 
-## Interactive wizard
+## Auto README Behavior
 
-Start wizard mode:
+`foldercraft` creates `README.md` files automatically for generated directories:
 
-```bash
-foldercraft --interactive
-```
+- Applies to root + nested generated folders
+- Skips directories that already define `README.md` in template/config/customizations
+- In `--merge` mode, existing `README.md` files are preserved
 
-Wizard behavior:
-
-- asks optional base setup (framework/config/empty/path/merge/overwrite/extend)
-- asks optional behavior toggles (dry-run/strict/verbose)
-- supports repeatable entry loops for:
-  - extra directories
-  - extra files
-  - file content overrides
-  - remove paths
-
-This keeps the CLI flexible and non-forcing for each project.
+This helps teams push structure-first repositories with clear folder intent.
 
 ## Profiles
 
-Profiles let users save reusable generation setups.
-
-### Save profile
+Save reusable setups:
 
 ```bash
 foldercraft --framework react --add-dir src/features --add-file .env --save-profile react-base
 ```
 
-### Use profile
+Use profile:
 
 ```bash
 foldercraft --profile react-base --path ./client-a
 ```
 
-### List and delete
+List or delete:
 
 ```bash
 foldercraft --list-profiles
 foldercraft --delete-profile react-base
 ```
 
-### Custom profile store path
-
-```bash
-foldercraft --profile react-base --profile-store ./team-profiles.json --path ./app
-```
-
-Default profile store path:
+Default profile store:
 
 ```text
 ~/.foldercraft/profiles.json
 ```
 
-## Advanced examples
+## Safety Rules
 
-### Add and remove in one command
-
-```bash
-foldercraft --framework react --path ./web \
-  --add-dir src/features src/shared \
-  --add-file .env .env.example \
-  --set-file README.md::"# Web App" \
-  --remove tests src/pages
-```
-
-### Safe merge into existing project
-
-```bash
-foldercraft --framework node --path ./existing-api --merge --add-dir src/jobs
-```
-
-### Strict remove validation
-
-```bash
-foldercraft --framework next --path ./site --remove app/old-route --strict
-```
-
-## Behavior and safety rules
-
-- Existing target behavior:
-  - default: fail if target exists
-  - `--merge`: keep existing files, add missing nodes
-  - `--overwrite`: remove target first, then recreate
-- A `README.md` is auto-created in each generated directory unless that directory already defines its own `README.md` in template/config/customizations.
-- In `--merge` mode, existing `README.md` files are preserved.
-- `--merge` and `--overwrite` are mutually exclusive.
-- Root filesystem path is blocked for safety.
-- Invalid config structure and invalid path segments are rejected with clear errors.
-- In verbose mode, extra diagnostic output is shown.
+- Default behavior fails when target already exists
+- `--merge` and `--overwrite` are mutually exclusive
+- Root filesystem path is blocked
+- Invalid config structure/path segments are rejected
 
 ## Troubleshooting
 
-### Command not found (`foldercraft`)
+### Command not found
 
-Run:
-
-```bash
-npm link
-```
-
-or install globally:
+Reinstall globally:
 
 ```bash
 npm install -g foldercraft
 ```
 
-### Permission errors
+Or, for local development:
 
-- choose a writable target directory
-- avoid protected system paths
-- run shell with proper permissions if needed
+```bash
+npm link
+```
 
 ### Invalid JSON config
 
-Validate your config with any JSON validator and ensure top-level value is an object.
+Ensure JSON is valid and top-level value is an object.
 
-## Development
+### Publish/readme not updated on npm
 
-```bash
-npm install
-npm run dev
-npm run lint
-npm test
-npm run build
-```
-
-Useful checks:
+npm updates package README only when a new version is published.
 
 ```bash
-foldercraft --framework react --path ./tmp-app --dry-run --verbose
-```
-
-## Publishing
-
-1. Bump `version` in `package.json`
-2. Run quality checks:
-
-```bash
-npm run lint
-npm test
-npm run build
-```
-
-3. Publish:
-
-```bash
+npm version patch
 npm publish --access public
 ```
-
-`prepublishOnly` already enforces lint + test + build before publish.
 
 ## License
 
